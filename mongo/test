@@ -1,0 +1,34 @@
+#include <wiredtiger.h>
+
+char *home = "WT_HOME";
+
+int main(void)
+{
+WT_CONNECTION *conn;
+WT_CURSOR *cursor;
+WT_SESSION *session;
+const char *key, *value;
+int ret;
+
+// 建立连接
+ret = wiredtiger_open(home, NULL, "create", &conn);
+
+// 建立session
+ret = conn->open_session(conn, NULL, NULL, &session);
+
+// access表，并指定key、value格式
+ret = session->create(session,
+"table:access", "key_format=S,value_format=S");
+
+// 创建cursor，并插入key-value
+ret = session->open_cursor(session,
+"table:access", NULL, NULL, &cursor);
+cursor->set_key(cursor, "key1");
+cursor->set_value(cursor, "value1");
+ret = cursor->insert(cursor);
+
+// 关闭连接
+ret = conn->close(conn, NULL);
+
+return ret;
+}
