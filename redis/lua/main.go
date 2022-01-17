@@ -1,4 +1,5 @@
 package handler
+
 //
 //import (
 //	"fmt"
@@ -97,3 +98,7 @@ package handler
 //
 //}
 //
+
+func main() {
+
+}
